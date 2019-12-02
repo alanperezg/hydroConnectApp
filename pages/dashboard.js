@@ -49,7 +49,7 @@ class Dashboard extends React.Component{
   }
 
   handleDevicesSelectChange(){
-    console.log("jeje");
+    
   }
 
 
@@ -73,6 +73,8 @@ class Dashboard extends React.Component{
             this.updateCharts(qRes.dashboard.ph.history, qRes.dashboard.ce.history, qRes.dashboard.temp.history, qRes.dashboard.lux.history, qRes.dashboard.waterLevel.history);
             this.dashboardUpdate();
         });
+      }else{
+
       }
     });
   }
@@ -229,8 +231,20 @@ class Dashboard extends React.Component{
                 margin: 0 20px;
                 border-top: 1px solid #e8e8e8;
               }
+              .noLinkedAlertContainer{
+                padding: 20px;
+                background-color: #fff;
+                border-radius: 2px;
+              }
+              .noLinkedAlertContainer > .text{
+                display: flex;
+                justify-content: center;
+              }
+              .noLinkedAlertContainer > .text:nth-last-child(n+2){
+                margin-bottom: 10px;
+              }
           `}</style>
-      <LoggedUserMask showHeaderDevices={true} devices={this.state.devices} selectedDevice={this.state.selectedDevice} onDevicesSelectChange={this.handleDevicesSelectChange} deviceConnected={this.state.deviceConnected} pageTitle="Dashboard - Hydroconnect">
+      <LoggedUserMask showHeaderDevices={true} devices={this.state.devices} selectedDevice={this.state.selectedDevice} onDevicesSelectChange={this.handleDevicesSelectChange} deviceConnected={this.state.deviceConnected} showHeaderDevices={(this.state.devices.length > 0 ? true : false)} pageTitle="Dashboard - Hydroconnect">
         <Modal title="Parametros de configuración" state={this.state.parametersModalState} showHeader={true} showFooter={true} onCloseClick={this.handleParametersModalCloseBtnClick}>
           <div className="modalContainer">
               <div className="row">
@@ -247,57 +261,66 @@ class Dashboard extends React.Component{
             <div className="grayBtn">Guardar configuración</div>
           </div>
         </Modal>
-        <div className="buttonsMenu">
-          <div className="grayBtn" onClick={this.handleParametersModalOpenBtnClick}>Configurar parametros</div>
-        </div>
-         <ContentBlock title="PH">
-            <InformationBoxContainer>
-              <InformationBox title="Actual" value={this.state.phAc}/>
-              <InformationBox title="Promedio diario" value={this.state.phProm}/>
-              <InformationBox title="Requerido" value={this.state.phReq}/>
-            </InformationBoxContainer>
-            <div className="chart">
-              <canvas id="phChart"></canvas>
+        <div className={(this.state.devices.length > 0 ? '' : 'hide')}>
+          <div className="buttonsMenu">
+            <div className="grayBtn" onClick={this.handleParametersModalOpenBtnClick}>Configurar parametros</div>
+          </div>
+          <ContentBlock title="PH">
+              <InformationBoxContainer>
+                <InformationBox title="Actual" value={this.state.phAc}/>
+                <InformationBox title="Promedio diario" value={this.state.phProm}/>
+                <InformationBox title="Requerido" value={this.state.phReq}/>
+              </InformationBoxContainer>
+              <div className="chart">
+                <canvas id="phChart"></canvas>
+              </div>
+            </ContentBlock>
+            <ContentBlock title="CE">
+              <InformationBoxContainer>
+                <InformationBox title="Actual" value={this.state.ceAc}/>
+                <InformationBox title="Promedio diario" value={this.state.ceProm}/>
+                <InformationBox title="Requerido" value={this.state.ceReq}/>
+              </InformationBoxContainer>
+              <div className="chart">
+                <canvas id="ceChart"></canvas>
+              </div>
+            </ContentBlock>
+            <ContentBlock title="Nivel de agua">
+              <InformationBoxContainer>
+                <InformationBox title="Actual" value={this.state.waterLevelAc}/>
+                <InformationBox title="Promedio diario" value={this.state.waterLevelProm}/>
+                <InformationBox title="Requerido" value={this.state.waterLevelReq}/>
+              </InformationBoxContainer>
+              <div className="chart">
+                <canvas id="waterLevelChart"></canvas>
+              </div>
+            </ContentBlock>
+            <ContentBlock title="Temperatura">
+              <InformationBoxContainer>
+                <InformationBox title="Actual" value={this.state.tempAc}/>
+                <InformationBox title="Promedio diario" value={this.state.tempProm}/>
+              </InformationBoxContainer>
+              <div className="chart">
+                <canvas id="tempChart"></canvas>
+              </div>
+            </ContentBlock>
+            <ContentBlock title="Luz">
+              <InformationBoxContainer>
+                <InformationBox title="Actual" value={this.state.luxAc}/>
+                <InformationBox title="Promedio diario" value={this.state.luxProm}/>
+              </InformationBoxContainer>
+              <div className="chart">
+                <canvas id="luxChart"></canvas>
+              </div>
+            </ContentBlock>
+          </div>
+          <div className={"noLinkedAlertContainer "+(this.state.devices.length > 0 ? 'hide' : '')}>
+            <div className="text">No hay dispositivos vinculados a esta cuenta.</div>
+            <div className="text">Para comenzar agregue un nuevo dispositivo en la sección de Dispositivos.</div>
+            <div className="text">
+              <div className="grayBtn" onClick={()=>{window.location.href="/dispositivos"}}>Ir dispositivos</div>
             </div>
-          </ContentBlock>
-          <ContentBlock title="CE">
-            <InformationBoxContainer>
-              <InformationBox title="Actual" value={this.state.ceAc}/>
-              <InformationBox title="Promedio diario" value={this.state.ceProm}/>
-              <InformationBox title="Requerido" value={this.state.ceReq}/>
-            </InformationBoxContainer>
-            <div className="chart">
-              <canvas id="ceChart"></canvas>
-            </div>
-          </ContentBlock>
-          <ContentBlock title="Nivel de agua">
-            <InformationBoxContainer>
-              <InformationBox title="Actual" value={this.state.waterLevelAc}/>
-              <InformationBox title="Promedio diario" value={this.state.waterLevelProm}/>
-              <InformationBox title="Requerido" value={this.state.waterLevelReq}/>
-            </InformationBoxContainer>
-            <div className="chart">
-              <canvas id="waterLevelChart"></canvas>
-            </div>
-          </ContentBlock>
-          <ContentBlock title="Temperatura">
-            <InformationBoxContainer>
-              <InformationBox title="Actual" value={this.state.tempAc}/>
-              <InformationBox title="Promedio diario" value={this.state.tempProm}/>
-            </InformationBoxContainer>
-            <div className="chart">
-              <canvas id="tempChart"></canvas>
-            </div>
-          </ContentBlock>
-          <ContentBlock title="Luz">
-            <InformationBoxContainer>
-              <InformationBox title="Actual" value={this.state.luxAc}/>
-              <InformationBox title="Promedio diario" value={this.state.luxProm}/>
-            </InformationBoxContainer>
-            <div className="chart">
-              <canvas id="luxChart"></canvas>
-            </div>
-          </ContentBlock>
+          </div>
       </LoggedUserMask>
       </div>
     );

@@ -62,7 +62,7 @@ class Dispositivos extends React.Component{
             vincularStep2ModalState: 2 
 
         });
-        let socket = io('http://localhost:4200');
+        let socket = io('http://157.245.233.250:4200');
         let json = JSON.stringify({token: this.state.token, deviceId: this.state.inputs.idDispositivoInput, name: this.state.inputs.nombreDispositivoInput});
         socket.emit('syncrequest', json);
         socket.on('syncresponse', function(message){
@@ -210,6 +210,9 @@ class Dispositivos extends React.Component{
                         margin: 0 20px;
                         border-top: 1px solid #e8e8e8;
                     }
+                    .noDevicesAlert{
+                        text-align: center;
+                    }
                 `}</style>
                 <Modal state={this.state.vincularStep1ModalState} title="Vincular dispositivo" showHeader={true} onCloseClick={() => {this.handleCloseModalClick('vincularStep1ModalState')}}>
                     <div className="modalContainer">
@@ -262,16 +265,21 @@ class Dispositivos extends React.Component{
                     <div className="grayBtn" onClick={this.handleVincularButtonClick}>Vincular dispositivo</div>
                 </div>
                 <ContentBlock title="Dispositivos">
-                    {this.state.devices.map((e, i)=>{
-                        return (<div key={i} className="device">
-                            <div className="name">
-                                <i className={"statusDot fa fa-circle "+(e.connected == 0 ? 'offline' : 'online')}></i>
-                                <div className="title">{e.name}</div>
-                            </div>
-                            <div className="address">ID: {e.deviceId}</div>
-                            <Dropdown options={[{name: "Eliminar", onClick: ()=>{this.handleEliminarDispositivoClick(e.id)}}]}></Dropdown>
-                        </div>);
-                    })}
+                    <div>
+                        {this.state.devices.map((e, i)=>{
+                            return (<div key={i} className="device">
+                                <div className="name">
+                                    <i className={"statusDot fa fa-circle "+(e.connected == 0 ? 'offline' : 'online')}></i>
+                                    <div className="title">{e.name}</div>
+                                </div>
+                                <div className="address">ID: {e.deviceId}</div>
+                                <Dropdown options={[{name: "Eliminar", onClick: ()=>{this.handleEliminarDispositivoClick(e.id)}}]}></Dropdown>
+                            </div>);
+                        })}
+                    </div>
+                    <div className={"noDevicesAlert "+(this.state.devices.length > 0 ? 'hide' : '')}>
+                        No hay dispositivos vinculados
+                    </div>
                 </ContentBlock>
             </LoggedUserMask>
         );
