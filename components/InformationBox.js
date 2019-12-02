@@ -18,6 +18,12 @@ export class InformationBox extends React.Component{
                         color: #85982f;
                         text-align: center;
                     }
+                    @media (max-width: 700px) {
+                        .informationBox{
+                            width: 100%;
+                            margin-bottom: 5px;
+                        }
+                    }
                 `}</style>
                 <div className="title">{this.props.title}</div>
                 <div className="value">{this.props.value}</div>

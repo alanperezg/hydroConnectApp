@@ -7,6 +7,7 @@ export class InformationBoxContainer extends React.Component{
                 <style jsx>{`
                      .informationBoxContainer{
                         display: flex;
+                        flex-wrap: wrap;
                         justify-content: space-between;
                         width: 80%;
                         margin: auto;

@@ -2,6 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 export class Modal extends React.Component{
+    constructor(props){
+         super(props);
+         
+         this.handleCloseBtnClick = this.handleCloseBtnClick.bind(this);
+    }
+
+    handleCloseBtnClick(){
+        this.props.onCloseClick();
+    }
     render(){
         return (
             <div className={"background "+((this.props.state == 1 || this.props.state == 2) ? '' : 'hide') }>
@@ -45,24 +54,6 @@ export class Modal extends React.Component{
                         cursor: pointer;
                     }
 
-                    .content{
-                        padding: 10px 20px;
-                    }
-
-                    .footer{
-                        display: flex;
-                        justify-content: flex-end;
-                        align-items: center;
-                        padding: 15px;
-                    }
-                    .footer > .btn{
-                        font-size: 14px;
-                        background-color: #85982f;
-                        color: #fff;
-                        padding: 8px 15px;
-                        border-radius: 2px;
-                        cursor: pointer;
-                    }
                     .loading > i{
                         font-size: 35px;
                         color: #797979;
@@ -71,18 +62,11 @@ export class Modal extends React.Component{
                 <div className={"mainContainer "+(this.props.state == 2 ? '' : 'hide')}>
                     <div className={"header "+(this.props.showHeader ? '' : 'hide')} >
                         <div className="title">{this.props.title}</div>
-                        <div className="closeBtn">
+                        <div className={"closeBtn "+(this.props.showClose ? '' : 'hide')} onClick={this.handleCloseBtnClick}>
                             <i className="material-icons">close</i>
                         </div>
                     </div>
-                    <div className="content">
-                        {this.props.children}
-                    </div>
-                    <div className={"footer "+(this.props.showFooter ? '' : 'hide')} >
-                        {(()=>{
-                        })()}
-                        <div className="btn">Siguiente</div>
-                    </div>
+                    {this.props.children}
                 </div>
                 <div className={"loading "+(this.props.state == 1 ? '' : 'hide')}>
                     <i className="fa fa-circle-notch fa-spin"></i>
@@ -92,12 +76,12 @@ export class Modal extends React.Component{
     }
 }
 Modal.defaultProps = {
-    state: 0, showHeader: false, title: "", showFooter: false, buttons:[]
+    state: 0, showHeader: false, title: "", showFooter: false, buttons:[], showClose: true
 }
 Modal.proptypes = {
     state: PropTypes.number.isRequired,
     showHeader: PropTypes.bool.isRequired,
     title: PropTypes.string.isRequired,
-    showFooter: PropTypes.bool.isRequired,
-    buttons: PropTypes.array.isRequired
+    onCloseClick: PropTypes.func.isRequired,
+    showClose: PropTypes.bool.isRequired
 }

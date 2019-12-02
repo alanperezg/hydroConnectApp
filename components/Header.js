@@ -1,7 +1,18 @@
 import React from 'react';
 import Link from 'next/link';
+import Router from "next/router";
 
 export class Header extends React.Component{
+    constructor(props){
+        super(props);
+
+        this.handleLogoutClick = this.handleLogoutClick.bind(this);
+    }
+
+    handleLogoutClick(){
+        localStorage.removeItem('token');
+        Router.push({pathname: '/'})
+    }
     render(){
         return(
             <div>
@@ -59,9 +70,17 @@ export class Header extends React.Component{
                         color: #4b5b63;
                         font-weight: 300;
                     }
-                    .header > .headerBottom > .status::before{
+                    .header > .headerBottom > .status.connected::before{
                         content: '•';
                         color: #4CAF50;
+                        font-size: 30px;
+                        line-height: 30px;
+                        vertical-align: middle;
+                        margin-right: 5px;
+                    }
+                    .header > .headerBottom > .status.disconnected::before{
+                        content: '•';
+                        color: #F44336;
                         font-size: 30px;
                         line-height: 30px;
                         vertical-align: middle;
@@ -90,13 +109,20 @@ export class Header extends React.Component{
                         <ul className="nav">
                             <Link href="/"><li>Dashboard</li></Link>
                             <Link href="/dispositivos"><li>Dispositivos</li></Link>
+                            <li onClick={this.handleLogoutClick}><i className="material-icons">power_settings_new</i></li>
                         </ul>
                     </div>
                     <div className={`headerBottom ${(this.props.showDevices === false ? 'hide' : '')}`}>
-                        <div className="status">Conectado</div>
-                        <select>
-                            <option>Dispositivo 1</option>
-                            <option>Dispositivo 2</option>
+                        <div className={"status "+(this.props.deviceConnected == 1 ? 'connected' : 'disconnected')}>{(this.props.deviceConnected == 1 ? 'Conectado' : 'Desconectado')}</div>
+                        <select value={this.props.selectedDevice} onChange={this.props.onDevicesSelectChange}>
+                            {(()=>{
+                                if(this.props.devices != null){
+                                    return this.props.devices.map((e, k) => {
+                                        console.log(e);
+                                        return (<option key={k} value={e.id}>{e.name}</option>);
+                                    });
+                                }
+                            })()}
                         </select>
                     </div>
                 </div>
