@@ -2,7 +2,7 @@ import 'isomorphic-fetch';
 export class Api{
     static getApiUrl(){
        //return "http://198.211.103.249/";
-       return "http://192.168.100.208:3000/";
+       return "http://167.99.6.143:3000/";
     }
     static get(url, callback, auth = true){
         let headers = {};
