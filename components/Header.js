@@ -104,7 +104,6 @@ export class Header extends React.Component{
                     <div className="headerTop">
                         <div className="title">
                             <img src="logo.png"></img>
-                            <div>Apponics</div>
                         </div>
                         <ul className="nav">
                             <Link href="/"><li>Dashboard</li></Link>
